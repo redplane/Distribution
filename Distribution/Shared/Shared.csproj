@@ -56,6 +56,7 @@
     <Compile Include="Repositories\ParentRepository.cs" />
     <Compile Include="Repositories\RepositoryAccount.cs" />
     <Compile Include="Repositories\UnitOfWork.cs" />
+    <Compile Include="Services\ISystemFileService.cs" />
     <Compile Include="ViewModels\RegisterAccountViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,11 +1,18 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Text;
+using System.Web.Http;
 using Administration.Configs;
+using Administration.Models;
 using Owin;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 
 namespace Administration
 {
     public class Startup
     {
+        #region Methods
+
         // This code configures Web API. The Startup class is specified as a type
         // parameter in the WebApp.Start method.
         public void Configuration(IAppBuilder appBuilder)
@@ -26,8 +33,14 @@ namespace Administration
             // Register inversion of control.
             InversionOfControlConfig.Register(appBuilder, httpConfiguration);
 
+            // Config queue.
+            MqConfig.Configure(httpConfiguration);
+
             // Register web API module.
             appBuilder.UseWebApi(httpConfiguration);
+
         }
+        
+        #endregion
     }
 }

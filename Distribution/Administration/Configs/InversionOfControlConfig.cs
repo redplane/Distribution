@@ -1,12 +1,19 @@
-﻿using System.Data.Entity;
+﻿using System.Configuration;
+using System.Data.Entity;
+using System.IO;
+using System.Net.Http.Headers;
+using System.Reflection;
 using System.Web.Http;
+using Administration.Models;
+using Administration.Services;
 using Autofac;
 using Autofac.Integration.WebApi;
+using Newtonsoft.Json;
 using Owin;
-using Shared.Interfaces;
 using Shared.Interfaces.Repositories;
 using Shared.Models.Contexts;
 using Shared.Repositories;
+using Shared.Services;
 
 namespace Administration.Configs
 {
@@ -39,6 +46,15 @@ namespace Administration.Configs
             // Unit of work registration.
             containerBuilder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerLifetimeScope();
 
+            // Register services.
+            var systemFileService = new SystemFileService();
+            containerBuilder.RegisterType<SystemFileService>().As<ISystemFileService>().OnActivating(x => x.ReplaceInstance(systemFileService)).InstancePerLifetimeScope();
+
+            // Find queue setting.
+            var mqOption =
+                systemFileService.LoadJsonFile<MqOption>(ConfigurationManager.AppSettings["MqConfigurationFile"], false);
+            containerBuilder.RegisterType<MqOption>().OnActivating(x => x.ReplaceInstance(mqOption)).SingleInstance();
+
             #endregion
 
             #region IoC build
@@ -54,7 +70,7 @@ namespace Administration.Configs
 
             #endregion
         }
-
+        
         #endregion
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Web.Http;
-using Shared.Interfaces;
 using Shared.Interfaces.Repositories;
 
 namespace Administration.Controllers
@@ -10,7 +9,7 @@ namespace Administration.Controllers
         #region Properties
 
         /// <summary>
-        /// Contains functions & repositories to access into database.
+        ///     Contains functions & repositories to access into database.
         /// </summary>
         private readonly IUnitOfWork _unitOfWork;
 
@@ -19,7 +18,7 @@ namespace Administration.Controllers
         #region Constructors
 
         /// <summary>
-        /// Initiate controller with injectors
+        ///     Initiate controller with injectors
         /// </summary>
         /// <param name="unitOfWork"></param>
         public ApiAccountController(IUnitOfWork unitOfWork)
@@ -32,7 +31,7 @@ namespace Administration.Controllers
         #region Methods
 
         /// <summary>
-        /// Hello world method.
+        ///     Hello world method.
         /// </summary>
         /// <returns></returns>
         [Route("")]
