@@ -225,7 +225,12 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="App\Queues.json" />
+    <None Include="App\MqConfigFile.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="App\MqLists.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Database\iDistribution.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

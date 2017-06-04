@@ -1,0 +1,10 @@
+﻿{
+  "account-registration": {
+    "exchange": "",
+    "kindOfQueue": "fanout",
+    "durable": true,
+    "autoDelete": true,
+    "autoAcknowledge": true,
+    "name": "account-registration"
+  } 
+}

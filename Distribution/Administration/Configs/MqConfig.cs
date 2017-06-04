@@ -32,9 +32,20 @@ namespace Administration.Configs
 
         #endregion
 
+        #region Constructor
+
+        /// <summary>
+        /// Initiate MqConfig.
+        /// </summary>
+        public MqConfig()
+        {
+            _cloudQueueConfig = new Dictionary<string, CloudBasicQueue>();
+        }
+
+        #endregion
+
         #region Methods
         
-
         /// <summary>
         /// Config queue with settings.
         /// </summary>
@@ -56,51 +67,77 @@ namespace Administration.Configs
 
             // Initiate connection factory with specific information.
             _connectionFactory = new ConnectionFactory();
-            _connectionFactory.HostName = qOption.HostName;
+            _connectionFactory.Uri = qOption.Url;
+            _connectionFactory.HostName = qOption.Server;
             _connectionFactory.UserName = qOption.Username;
-            _connectionFactory.VirtualHost = qOption.Username;
             _connectionFactory.Password = qOption.Password;
             
             // Load queues list.
             LoadQueuesList(httpConfiguration);
 
             // Initiate queue handlers.
-            HandleAccountRegistrationEvent();
+            HandleAccountRegistrationEvent(httpConfiguration);
         }
-        
+
         /// <summary>
         /// Handle account registration event.
         /// </summary>
-        private static void HandleAccountRegistrationEvent()
+        /// <param name="httpConfiguration"></param>
+        private static void HandleAccountRegistrationEvent(HttpConfiguration httpConfiguration)
         {
             // Find queue config.
             var qOption = _cloudQueueConfig[Queues.AccountRegistration];
 
             // Initiate connection to cloud message queue service.
-            using (var connection = _connectionFactory.CreateConnection())
-            using (var channel = connection.CreateModel())
-            {
-                // Queue declaration.
-                channel.QueueDeclare(qOption.Name,
-                                     qOption.Durable,
-                                     qOption.IsExclusive,
-                                     qOption.AutoDelete,
-                                     arguments: null);
+            //using (var connection = _connectionFactory.CreateConnection())
+            //using (var channel = connection.CreateModel())
+            //{
+            //    // Queue declaration.
+            //    channel.QueueDeclare(qOption.Name,
+            //                         qOption.Durable,
+            //                         qOption.IsExclusive,
+            //                         qOption.AutoDelete,
+            //                         new Dictionary<string, object>());
 
-                // Initiate consumer and catch event.
-                var consumer = new EventingBasicConsumer(channel);
-                consumer.Received += (model, ea) =>
-                {
-                    var body = ea.Body;
-                    var message = Encoding.UTF8.GetString(body);
-                    Console.WriteLine(" [x] Received {0}", message);
-                };
-                
-                // Consume message automatically.
-                channel.BasicConsume(qOption.Name,
-                                     qOption.AutoAcknowledge,
-                                     consumer);
-            }
+            //    // Initiate consumer and catch event.
+            //    var consumer = new EventingBasicConsumer(channel);
+            //    consumer.Received += (model, ea) =>
+            //    {
+            //        var body = ea.Body;
+            //        var message = Encoding.UTF8.GetString(body);
+            //        Console.WriteLine(" [x] Received {0}", message);
+            //    };
+
+            //    // Consume message automatically.
+            //    channel.BasicConsume(qOption.Name,
+            //                         qOption.AutoAcknowledge,
+            //                         consumer);
+            //}
+
+            var connection = _connectionFactory.CreateConnection();
+            var channel = connection.CreateModel();
+            
+            // Queue declaration.
+            channel.QueueDeclare(qOption.Name,
+                                    qOption.Durable,
+                                    qOption.IsExclusive,
+                                    qOption.AutoDelete,
+                                    new Dictionary<string, object>());
+
+            // Initiate consumer and catch event.
+            var consumer = new EventingBasicConsumer(channel);
+            consumer.Received += (model, ea) =>
+            {
+                var body = ea.Body;
+                var message = Encoding.UTF8.GetString(body);
+                Console.WriteLine(" [x] Received {0}", message);
+            };
+
+            // Consume message automatically.
+            channel.BasicConsume(qOption.Name,
+                                    qOption.AutoAcknowledge,
+                                    consumer);
+            
         }
         
         /// <summary>
