@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Configuration;
-using Administration.Services;
 using Microsoft.Owin.Hosting;
-using Shared.Services;
 
 namespace Administration
 {
@@ -33,7 +31,7 @@ namespace Administration
 
             Console.WriteLine(">> Startin service at: {0}", rootUrl);
             WebApp.Start<Startup>(rootUrl);
-            
+
             Console.WriteLine(">> Host started at: {0}", rootUrl);
             Console.WriteLine(">> Press any key to stop");
             Console.ReadLine();

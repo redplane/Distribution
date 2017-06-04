@@ -1,6 +1,6 @@
-﻿namespace Administration.Models
+﻿namespace Shared.Models.Messages
 {
-    public class MqOption
+    public class MqServer
     {
         #region Properties
 

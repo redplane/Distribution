@@ -6,8 +6,13 @@ namespace Ordinary
 {
     public class Startup
     {
-        // This code configures Web API. The Startup class is specified as a type
-        // parameter in the WebApp.Start method.
+
+        #region Methods
+
+        /// <summary>
+        /// This code configures Web API. The Startup class is specified as a type parameter in the WebApp.Start method.
+        /// </summary>
+        /// <param name="appBuilder"></param>
         public void Configuration(IAppBuilder appBuilder)
         {
             // Configure Web API for self-host. 
@@ -29,5 +34,7 @@ namespace Ordinary
             // Register web API module.
             appBuilder.UseWebApi(httpConfiguration);
         }
+
+        #endregion
     }
 }

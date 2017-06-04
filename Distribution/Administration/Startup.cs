@@ -2,7 +2,6 @@
 using System.Text;
 using System.Web.Http;
 using Administration.Configs;
-using Administration.Models;
 using Owin;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;

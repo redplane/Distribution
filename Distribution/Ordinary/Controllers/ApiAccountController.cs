@@ -70,6 +70,8 @@ namespace Ordinary.Controllers
             _unitOfWork.RepositoryAccount.Insert(account);
             await _unitOfWork.CommitAsync();
 
+            // Broadcast notification to hub.
+
             return Ok(account);
         }
 

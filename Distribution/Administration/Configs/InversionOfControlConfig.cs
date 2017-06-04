@@ -4,7 +4,6 @@ using System.IO;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Web.Http;
-using Administration.Models;
 using Administration.Services;
 using Autofac;
 using Autofac.Integration.WebApi;
@@ -12,6 +11,7 @@ using Newtonsoft.Json;
 using Owin;
 using Shared.Interfaces.Repositories;
 using Shared.Models.Contexts;
+using Shared.Models.Messages;
 using Shared.Repositories;
 using Shared.Services;
 
@@ -52,8 +52,8 @@ namespace Administration.Configs
 
             // Find queue setting.
             var mqOption =
-                systemFileService.LoadJsonFile<MqOption>(ConfigurationManager.AppSettings["MqConfigurationFile"], false);
-            containerBuilder.RegisterType<MqOption>().OnActivating(x => x.ReplaceInstance(mqOption)).SingleInstance();
+                systemFileService.LoadJsonFile<MqServer>(ConfigurationManager.AppSettings["MqConfigurationFile"], false);
+            containerBuilder.RegisterType<MqServer>().OnActivating(x => x.ReplaceInstance(mqOption)).SingleInstance();
 
             #endregion
 

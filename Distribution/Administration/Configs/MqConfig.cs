@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Text;
 using System.Web.Http;
-using Administration.Models;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Collections.Generic;
 using System.Configuration;
 using Shared.Services;
 using Administration.Constants;
+using Shared.Models.Messages;
 
 namespace Administration.Configs
 {
@@ -23,7 +23,7 @@ namespace Administration.Configs
         /// <summary>
         /// Cloud settings.
         /// </summary>
-        private static Dictionary<string, CloudBasicQueue> _cloudQueueConfig;
+        private static Dictionary<string, MqBasic> _cloudQueueConfig;
 
         /// <summary>
         /// Service which handles file operation.
@@ -39,7 +39,7 @@ namespace Administration.Configs
         /// </summary>
         public MqConfig()
         {
-            _cloudQueueConfig = new Dictionary<string, CloudBasicQueue>();
+            _cloudQueueConfig = new Dictionary<string, MqBasic>();
         }
 
         #endregion
@@ -61,7 +61,7 @@ namespace Administration.Configs
                 throw new Exception("Cannot find information bound to MqConfigFile in App.config");
             
             // Load option from file.
-            var qOption = _systemFileService.LoadJsonFile<MqOption>(ConfigurationManager.AppSettings[key], false);
+            var qOption = _systemFileService.LoadJsonFile<MqServer>(ConfigurationManager.AppSettings[key], false);
             if (qOption == null)
                 throw new Exception("Cannot find information bound to MqConfigFile in App.config");
 
@@ -155,7 +155,7 @@ namespace Administration.Configs
                 throw new Exception($"Queues configuration file doesn't exist. Please specify configuration file using {key} in App.config");
 
             // Find file service in HttpConfiguration.
-            _cloudQueueConfig = _systemFileService.LoadJsonFile<Dictionary<string, CloudBasicQueue>>(mqConfigurationFile, false);
+            _cloudQueueConfig = _systemFileService.LoadJsonFile<Dictionary<string, MqBasic>>(mqConfigurationFile, false);
         }
 
         #endregion
