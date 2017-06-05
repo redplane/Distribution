@@ -3,9 +3,13 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Ordinary.Constants;
+using Ordinary.Interfaces;
 using Shared.Interfaces.Repositories;
 using Shared.Models.Entities;
+using Shared.Models.Messages;
 using Shared.ViewModels;
+using Shared.Services;
 
 namespace Ordinary.Controllers
 {
@@ -19,6 +23,11 @@ namespace Ordinary.Controllers
         /// </summary>
         private readonly IUnitOfWork _unitOfWork;
 
+        /// <summary>
+        /// Service which is for handling queue.
+        /// </summary>
+        private readonly IMqService _mqService;
+        
         #endregion
 
         #region Constructors
@@ -27,9 +36,11 @@ namespace Ordinary.Controllers
         /// Initiate account controller,
         /// </summary>
         /// <param name="unitOfWork"></param>
-        public ApiAccountController(IUnitOfWork unitOfWork)
+        /// <param name="mqService"></param>
+        public ApiAccountController(IUnitOfWork unitOfWork, IMqService mqService)
         {
             _unitOfWork = unitOfWork;
+            _mqService = mqService;
         }
 
         #endregion
@@ -71,6 +82,10 @@ namespace Ordinary.Controllers
             await _unitOfWork.CommitAsync();
 
             // Broadcast notification to hub.
+            var accountRegistrationMessage = new AccountRegistrationMessage();
+            accountRegistrationMessage.Email = conditions.Email;
+            accountRegistrationMessage.Time = 0;
+            _mqService.Send(MqNames.AccountRegistration, accountRegistrationMessage);
 
             return Ok(account);
         }

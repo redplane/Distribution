@@ -102,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configs\InversionOfControlConfig.cs" />
+    <Compile Include="Constants\MqNames.cs" />
     <Compile Include="Controllers\ApiAccountController.cs" />
     <Compile Include="Interfaces\IMqService.cs" />
     <Compile Include="Program.cs" />

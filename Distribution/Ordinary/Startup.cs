@@ -6,7 +6,6 @@ namespace Ordinary
 {
     public class Startup
     {
-
         #region Methods
 
         /// <summary>

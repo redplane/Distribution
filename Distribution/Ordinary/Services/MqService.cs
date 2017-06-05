@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Ordinary.Interfaces;
 using RabbitMQ.Client;
 using Shared.Models.Messages;
+using System.Text;
 
 namespace Ordinary.Services
 {
@@ -70,10 +71,24 @@ namespace Ordinary.Services
         /// <param name="message"></param>
         public void Send(string queueName, object message)
         {
+            // Find queue by name.
+            var mqBasic = _mqBasics[queueName];
+
             // Serialize message to string.
             var szMessage = JsonConvert.SerializeObject(message);
 
-            throw new NotImplementedException();
+            using (var connection = _connectionFactory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                // Queue declaration.
+                channel.QueueDeclare(mqBasic.Name, mqBasic.Durable, mqBasic.IsExclusive, mqBasic.AutoDelete, null);
+                
+                // Encode message.
+                var body = Encoding.UTF8.GetBytes(szMessage);
+
+                // Publish basic queue.
+                channel.BasicPublish(mqBasic.Exchange, mqBasic.Name, null, body);
+            }
         }
 
         #endregion
