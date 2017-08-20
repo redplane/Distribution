@@ -67,7 +67,7 @@ namespace Administration.Configs
 
             // Initiate connection factory with specific information.
             _connectionFactory = new ConnectionFactory();
-            _connectionFactory.Uri = qOption.Url;
+            _connectionFactory.Uri = new Uri(qOption.Url);
             _connectionFactory.HostName = qOption.Server;
             _connectionFactory.UserName = qOption.Username;
             _connectionFactory.Password = qOption.Password;

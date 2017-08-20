@@ -33,7 +33,7 @@ namespace Ordinary.Services
         public void SetServer(MqServer mqServer)
         {
             _connectionFactory = new ConnectionFactory();
-            _connectionFactory.Uri = mqServer.Url;
+            _connectionFactory.Uri = new Uri(mqServer.Url);
             _connectionFactory.HostName = mqServer.Server;
             _connectionFactory.UserName = mqServer.Username;
             _connectionFactory.Password = mqServer.Password;
